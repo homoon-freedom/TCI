@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TCI-130 정밀 분석 도구</title>
+    <title>TCI-130 멀티 유저 분석 도구</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         :root {
@@ -11,11 +11,17 @@
             --bar-high: #56a3ce; --bar-low: #e57373; --bar-mid: #a0a0a0;
         }
         body { font-family: 'Pretendard', -apple-system, sans-serif; background-color: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .container { max-width: 1000px; width: 100%; padding-top: 40px; }
+        .container { max-width: 1000px; width: 100%; padding-top: 60px; }
         
-        .progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 6px; background: #ddd; z-index: 1000; }
+        /* 사용자 관리 바 */
+        .user-manager { position: fixed; top: 0; left: 0; width: 100%; background: #333; color: white; padding: 10px 20px; display: flex; align-items: center; gap: 15px; z-index: 1100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); box-sizing: border-box; }
+        .user-select { padding: 5px 10px; border-radius: 5px; border: none; font-size: 0.9rem; min-width: 120px; }
+        .user-btn { background: var(--primary); color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
+        .user-btn.del { background: #e57373; }
+
+        .progress-container { position: fixed; top: 45px; left: 0; width: 100%; height: 6px; background: #ddd; z-index: 1000; }
         #progressBar { height: 100%; width: 0%; background: var(--primary); transition: width 0.3s; }
-        .progress-text { position: fixed; top: 10px; right: 20px; font-size: 0.8rem; font-weight: bold; color: var(--primary); background: white; padding: 2px 8px; border-radius: 10px; border: 1px solid #ddd; z-index: 1000; }
+        .progress-text { position: fixed; top: 55px; right: 20px; font-size: 0.8rem; font-weight: bold; color: var(--primary); background: white; padding: 2px 8px; border-radius: 10px; border: 1px solid #ddd; z-index: 1000; }
 
         .question-card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 15px; }
@@ -51,57 +57,60 @@
 </head>
 <body>
 
+<div class="user-manager">
+    <span>검사자:</span>
+    <select id="userSelector" class="user-select" onchange="switchUser()"></select>
+    <button class="user-btn" onclick="addUser()">추가</button>
+    <button class="user-btn del" onclick="deleteUser()">삭제</button>
+</div>
+
 <div class="progress-container"><div id="progressBar"></div></div>
 <div class="progress-text" id="progressText">0/130</div>
 
 <div class="container">
     <header style="text-align:center; margin-bottom:30px;">
-        <h1>TCI-130 정밀 프로파일 분석</h1>
-        <p>본인의 평소 모습에 가장 가까운 번호를 선택해주세요.</p>
-        <button type="button" class="reset-btn" onclick="resetForm()">모든 응답 초기화</button>
+        <h1>TCI-130 정밀 분석</h1>
+        <p id="currentUserDisplay" style="font-weight: bold; color: var(--primary); font-size: 1.2rem;"></p>
+        <button type="button" class="reset-btn" onclick="resetCurrentAnswers()">현재 사용자 응답 초기화</button>
     </header>
 
     <form id="tciForm">
         <div id="questionsContainer"></div>
-        <button type="submit" class="submit-btn">결과 분석 리포트 생성</button>
+        <button type="submit" class="submit-btn">결과 분석 리포트 생성 (미응답은 '2번' 자동 선택)</button>
     </form>
 
     <div id="resultView">
         <div id="captureArea">
-            <h1 style="text-align:center; margin-bottom:10px;">TCI-130 정밀 분석 보고서</h1>
+            <h1 style="text-align:center; margin-bottom:10px;" id="resultTitle">TCI-130 분석 보고서</h1>
             <p style="text-align:center; color:#888; font-size:0.9rem;" id="reportDate"></p>
             
-            <h2>1. 상위 척도 프로파일 (기질 및 성격)</h2>
+            <h2>1. 상위 척도 프로파일</h2>
             <table>
                 <thead>
-                    <tr>
-                        <th>구분</th><th>척도명</th><th>원점수</th><th>T점수</th><th>백분위</th><th>그래프 (중앙 50% 기준)</th>
-                    </tr>
+                    <tr><th>구분</th><th>척도명</th><th>원점수</th><th>T점수</th><th>백분위</th><th>그래프 (50% 기준)</th></tr>
                 </thead>
                 <tbody id="mainBody"></tbody>
             </table>
 
-            <h2>2. 하위 척도 정밀 분석 (규준집단 대비 분포)</h2>
+            <h2>2. 하위 척도 정밀 분석</h2>
             <table>
                 <thead>
-                    <tr>
-                        <th>척도</th><th>하위척도</th><th>원점수</th><th>평균(SD)</th><th>낮은 특성</th><th>분포 (-1SD ~ +1SD)</th><th>높은 특성</th>
-                    </tr>
+                    <tr><th>척도</th><th>하위척도</th><th>원점수</th><th>평균(SD)</th><th>낮음</th><th>분포 (-1SD ~ +1SD)</th><th>높음</th></tr>
                 </thead>
                 <tbody id="subBody"></tbody>
             </table>
 
             <div class="interpretation-box">
                 <strong>[결과 해석 요약]</strong><br>
-                • <strong>T점수 50(백분위 50%)</strong>은 한국인 성인 평균치입니다.<br>
-                • <strong>하위 척도 그래프:</strong> 하늘색 영역은 규준 집단의 정상 범위($\pm 1SD$)를 의미하며, 점의 위치가 본인의 상대적 위치입니다.
+                • T점수 50은 한국인 평균치입니다. 하늘색 영역은 정상 범위를 의미합니다.
             </div>
         </div>
-        <button class="save-btn" onclick="saveImage()">분석 결과 공유 및 저장</button>
+        <button class="save-btn" onclick="saveImage()">이미지 공유 및 저장</button>
     </div>
 </div>
 
 <script>
+// (데이터 섹션: tciRawData, scaleMeta는 기존과 동일하므로 생략 없이 로직에 포함합니다)
 const tciRawData = [
     { id: 1, text: "쉬운 일보다는 도전적인 일이 더 좋다.", cat: "NS", sub: "NS1", rev: false },
     { id: 2, text: "나를 좋게 대했던 사람들과도 친하게 지낸다.", cat: "RD", sub: "RD2", rev: false },
@@ -237,7 +246,7 @@ const tciRawData = [
 
 const scaleMeta = {
     NS: { label: "자극추구", m: 32, sd: 8, subs: [
-        { id: "NS1", label: "탐색적 흥분", m: 9.5, sd: 3.2, low: "관습적 안정성", high: "탐색적 흥분" },
+        { id: "NS1", label: "탐색적 흥분", m: 9.5, sd: 3.2, low: "관습적", high: "탐색적" },
         { id: "NS2", label: "충동성", m: 7.0, sd: 3.3, low: "심사숙고", high: "충동성" },
         { id: "NS3", label: "무절제", m: 6.0, sd: 3.2, low: "절제", high: "무절제" },
         { id: "NS4", label: "자유분방", m: 5.2, sd: 3.2, low: "질서정연", high: "자유분방" }
@@ -246,46 +255,97 @@ const scaleMeta = {
         { id: "HA1", label: "예기불안", m: 7.8, sd: 4.1, low: "낙천성", high: "예기불안" },
         { id: "HA2", label: "두려움", m: 9.9, sd: 3.0, low: "침착함", high: "두려움" },
         { id: "HA3", label: "수줍음", m: 8.7, sd: 3.6, low: "사교성", high: "수줍음" },
-        { id: "HA4", label: "쉽게 지침", m: 8.7, sd: 3.4, low: "활기 넘침", high: "쉽게 지침" }
+        { id: "HA4", label: "쉽게 지침", m: 8.7, sd: 3.4, low: "활기", high: "지침" }
     ]},
     RD: { label: "사회적민감성", m: 40, sd: 7, subs: [
-        { id: "RD1", label: "감수성", m: 11.1, sd: 2.9, low: "낮은 감수성", high: "높은 감수성" },
-        { id: "RD2", label: "개방성", m: 10.5, sd: 3.0, low: "낮은 개방성", high: "높은 개방성" },
-        { id: "RD3", label: "친밀감", m: 11.6, sd: 3.3, low: "거리두기", high: "친밀감" },
+        { id: "RD1", label: "감수성", m: 11.1, sd: 2.9, low: "무딤", high: "민감" },
+        { id: "RD2", label: "개방성", m: 10.5, sd: 3.0, low: "폐쇄", high: "개방" },
+        { id: "RD3", label: "친밀감", m: 11.6, sd: 3.3, low: "거리감", high: "친밀" },
         { id: "RD4", label: "의존", m: 9.4, sd: 2.6, low: "독립", high: "의존" }
     ]},
     P: { label: "인내력", m: 38, sd: 8, subs: [
-        { id: "PS1", label: "근면", m: 12.7, sd: 3.0, low: "낮은 근면", high: "높은 근면" },
-        { id: "PS2", label: "끈기", m: 10.7, sd: 3.0, low: "낮은 끈기", high: "높은 끈기" },
-        { id: "PS3", label: "야망", m: 10.4, sd: 3.7, low: "낮은 야망", high: "높은 야망" },
-        { id: "PS4", label: "완벽주의", m: 9.9, sd: 3.5, low: "낮은 완벽주의", high: "높은 완벽주의" }
+        { id: "PS1", label: "근면", m: 12.7, sd: 3.0, low: "게으름", high: "근면" },
+        { id: "PS2", label: "끈기", m: 10.7, sd: 3.0, low: "변덕", high: "끈기" },
+        { id: "PS3", label: "야망", m: 10.4, sd: 3.7, low: "소박", high: "야망" },
+        { id: "PS4", label: "완벽주의", m: 9.9, sd: 3.5, low: "허술", high: "완벽" }
     ]},
     SD: { label: "자율성", m: 45, sd: 10, subs: [
-        { id: "SD1", label: "책임감", m: 12.7, sd: 2.9, low: "낮은 책임감", high: "높은 책임감" },
-        { id: "SD2", label: "목적의식", m: 11.6, sd: 3.1, low: "낮은 목적의식", high: "높은 목적의식" },
-        { id: "SD3", label: "유능감", m: 6.8, sd: 1.9, low: "낮은 유능감", high: "높은 유능감" },
-        { id: "SD4", label: "자기수용", m: 4.2, sd: 1.7, low: "낮은 자기수용", high: "높은 자기수용" },
-        { id: "SD5", label: "자기일치", m: 12.5, sd: 3.2, low: "낮은 자기일치", high: "높은 자기일치" }
+        { id: "SD1", label: "책임감", m: 12.7, sd: 2.9, low: "무책임", high: "책임" },
+        { id: "SD2", label: "목적의식", m: 11.6, sd: 3.1, low: "방황", high: "목적" },
+        { id: "SD3", label: "유능감", m: 6.8, sd: 1.9, low: "무력", high: "유능" },
+        { id: "SD4", label: "자기수용", m: 4.2, sd: 1.7, low: "자기비하", high: "수용" },
+        { id: "SD5", label: "자기일치", m: 12.5, sd: 3.2, low: "혼란", high: "일치" }
     ]},
     CO: { label: "연대감", m: 48, sd: 9, subs: [
-        { id: "CO1", label: "타인수용", m: 12.6, sd: 2.8, low: "낮은 타인수용", high: "높은 타인수용" },
-        { id: "CO2", label: "공감", m: 9.6, sd: 2.5, low: "낮은 공감", high: "높은 공감" },
-        { id: "CO3", label: "이타성", m: 9.9, sd: 2.5, low: "낮은 이타성", high: "높은 이타성" },
-        { id: "CO4", label: "관대함", m: 8.9, sd: 2.6, low: "낮은 관대함", high: "높은 관대함" },
-        { id: "CO5", label: "공평", m: 15.1, sd: 2.5, low: "낮은 공평", high: "높은 공평" }
+        { id: "CO1", label: "타인수용", m: 12.6, sd: 2.8, low: "비난", high: "수용" },
+        { id: "CO2", label: "공감", m: 9.6, sd: 2.5, low: "둔감", high: "공감" },
+        { id: "CO3", label: "이타성", m: 9.9, sd: 2.5, low: "이기", high: "이타" },
+        { id: "CO4", label: "관대함", m: 8.9, sd: 2.6, low: "보복", high: "관대" },
+        { id: "CO5", label: "공평", m: 15.1, sd: 2.5, low: "편견", high: "공평" }
     ]},
     ST: { label: "자기초월", m: 28, sd: 11, subs: [
         { id: "ST1", label: "몰입", m: 9.1, sd: 4.0, low: "자의식", high: "몰입" },
         { id: "ST2", label: "일체감", m: 7.4, sd: 4.1, low: "분리감", high: "일체감" },
-        { id: "ST3", label: "영성수용", m: 9.2, sd: 5.4, low: "유물론", high: "영성수용" }
+        { id: "ST3", label: "영성수용", m: 9.2, sd: 5.4, low: "물질", high: "영성" }
     ]}
 };
 
-const qContainer = document.getElementById('questionsContainer');
+// --- 멀티 유저 및 상태 관리 로직 ---
+let users = JSON.parse(localStorage.getItem('tci_user_list')) || ["기본사용자"];
+let currentUser = localStorage.getItem('tci_current_user') || "기본사용자";
 
-function init() {
+function initApp() {
+    renderUserList();
+    renderQuestions();
+    updateUIForUser();
+}
+
+function renderUserList() {
+    const sel = document.getElementById('userSelector');
+    sel.innerHTML = users.map(u => `<option value="${u}" ${u === currentUser ? 'selected' : ''}>${u}</option>`).join('');
+}
+
+function addUser() {
+    const name = prompt("새로운 사용자 이름을 입력하세요 (최대 10자):");
+    if (name && !users.includes(name)) {
+        users.push(name);
+        currentUser = name;
+        saveUserConfig();
+        location.reload();
+    } else if (users.includes(name)) {
+        alert("이미 존재하는 이름입니다.");
+    }
+}
+
+function switchUser() {
+    currentUser = document.getElementById('userSelector').value;
+    saveUserConfig();
+    location.reload();
+}
+
+function deleteUser() {
+    if (users.length <= 1) return alert("최소 한 명의 사용자는 있어야 합니다.");
+    if (confirm(`${currentUser} 유저의 모든 데이터를 삭제하시겠습니까?`)) {
+        for (let i = 1; i <= 130; i++) {
+            localStorage.removeItem(`tci_${currentUser}_q${i}`);
+        }
+        users = users.filter(u => u !== currentUser);
+        currentUser = users[0];
+        saveUserConfig();
+        location.reload();
+    }
+}
+
+function saveUserConfig() {
+    localStorage.setItem('tci_user_list', JSON.stringify(users));
+    localStorage.setItem('tci_current_user', currentUser);
+}
+
+function renderQuestions() {
+    const qContainer = document.getElementById('questionsContainer');
+    qContainer.innerHTML = '';
     tciRawData.forEach(q => {
-        const savedVal = localStorage.getItem(`tci_q${q.id}`);
+        const savedVal = localStorage.getItem(`tci_${currentUser}_q${q.id}`);
         const div = document.createElement('div');
         div.className = 'question-card';
         div.innerHTML = `
@@ -294,7 +354,7 @@ function init() {
                 ${[0,1,2,3,4].map(v => `
                     <div class="opt-item">
                         <input type="radio" name="q${q.id}" id="q${q.id}_${v}" value="${v}" 
-                        ${savedVal === v.toString() ? 'checked' : ''} required>
+                        ${savedVal === v.toString() ? 'checked' : ''}>
                         <label for="q${q.id}_${v}">${v}</label>
                     </div>
                 `).join('')}
@@ -302,12 +362,17 @@ function init() {
         `;
         qContainer.appendChild(div);
     });
+}
+
+function updateUIForUser() {
+    document.getElementById('currentUserDisplay').innerText = `현재 검사자: ${currentUser}`;
     updateProgress();
 }
 
-qContainer.addEventListener('change', (e) => {
+// 실시간 선택 저장
+document.getElementById('questionsContainer').addEventListener('change', (e) => {
     if(e.target.type === 'radio') {
-        localStorage.setItem(`tci_${e.target.name}`, e.target.value);
+        localStorage.setItem(`tci_${currentUser}_${e.target.name}`, e.target.value);
         updateProgress();
     }
 });
@@ -318,15 +383,33 @@ function updateProgress() {
     document.getElementById('progressText').innerText = `${answered}/130`;
 }
 
-function resetForm() {
-    if(confirm("모든 응답을 초기화하시겠습니까?")) {
-        localStorage.clear();
+function resetCurrentAnswers() {
+    if(confirm(`${currentUser}님의 모든 응답을 초기화하시겠습니까?`)) {
+        for (let i = 1; i <= 130; i++) {
+            localStorage.removeItem(`tci_${currentUser}_q${i}`);
+        }
         location.reload();
     }
 }
 
+// --- 분석 및 자동 응답 처리 로직 ---
 document.getElementById('tciForm').onsubmit = function(e) {
     e.preventDefault();
+    
+    // 미응답 문항을 찾아 자동으로 2번(중립) 선택
+    for (let i = 1; i <= 130; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) {
+            const defaultOption = document.getElementById(`q${i}_2`);
+            if (defaultOption) {
+                defaultOption.checked = true;
+                localStorage.setItem(`tci_${currentUser}_q${i}`, "2");
+            }
+        }
+    }
+    
+    updateProgress(); // UI 갱신
+
     const data = new FormData(this);
     let scores = { main: {}, sub: {} };
 
@@ -336,16 +419,16 @@ document.getElementById('tciForm').onsubmit = function(e) {
         scores.main[q.cat] = (scores.main[q.cat] || 0) + val;
         scores.sub[q.sub] = (scores.sub[q.sub] || 0) + val;
     });
-
-    render(scores);
+    renderResult(scores);
 };
 
-function render(scores) {
+function renderResult(scores) {
     const mainBody = document.getElementById('mainBody');
     const subBody = document.getElementById('subBody');
+    document.getElementById('resultTitle').innerText = `${currentUser}님의 TCI-130 정밀 보고서`;
+    document.getElementById('reportDate').innerText = `분석 일시: ${new Date().toLocaleString()}`;
     mainBody.innerHTML = '';
     subBody.innerHTML = '';
-    document.getElementById('reportDate').innerText = `분석 일시: ${new Date().toLocaleString()}`;
 
     Object.keys(scaleMeta).forEach((key, idx) => {
         const meta = scaleMeta[key];
@@ -367,12 +450,10 @@ function render(scores) {
         meta.subs.forEach(sub => {
             const sScore = scores.sub[sub.id] || 0;
             const sZ = (sScore - sub.m) / sub.sd;
-            let dotPos = ((sZ + 2) / 4) * 100;
-            dotPos = Math.max(5, Math.min(95, dotPos));
-
+            let dotPos = Math.max(5, Math.min(95, ((sZ + 2) / 4) * 100));
             subBody.innerHTML += `
                 <tr>
-                    <td>${key}</td><td>${sub.label}(${sub.id})</td><td>${sScore}</td>
+                    <td>${key}</td><td>${sub.label}</td><td>${sScore}</td>
                     <td style="font-size:0.75rem">${sub.m}(${sub.sd})</td>
                     <td style="color:#888; font-size:0.75rem">${sub.low}</td>
                     <td>
@@ -398,40 +479,23 @@ function normalCDF(z) {
     return z > 0 ? 1 - p : p;
 }
 
-// 모바일 공유 및 저장 기능 통합
 async function saveImage() {
     const captureArea = document.getElementById('captureArea');
     const canvas = await html2canvas(captureArea, { scale: 2, useCORS: true });
-
     canvas.toBlob(async (blob) => {
-        const file = new File([blob], `TCI_Result_${new Date().getTime()}.png`, { type: 'image/png' });
-
-        // Web Share API 지원 확인 (HTTPS 필요)
+        const file = new File([blob], `${currentUser}_TCI.png`, { type: 'image/png' });
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-                await navigator.share({
-                    files: [file],
-                    title: 'TCI-130 분석 결과',
-                    text: '나의 TCI 정밀 분석 보고서입니다.'
-                });
-            } catch (err) {
-                if (err.name !== 'AbortError') fallbackDownload(canvas);
-            }
+            await navigator.share({ files: [file], title: `${currentUser} TCI 결과`, text: '보고서' });
         } else {
-            fallbackDownload(canvas);
+            const link = document.createElement('a');
+            link.download = `${currentUser}_TCI.png`;
+            link.href = canvas.toDataURL();
+            link.click();
         }
     }, 'image/png');
 }
 
-function fallbackDownload(canvas) {
-    const link = document.createElement('a');
-    link.download = `TCI_Result_${new Date().getTime()}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    alert('이미지가 저장되었습니다. 카톡 등에서 불러와 공유해 주세요.');
-}
-
-init();
+initApp();
 </script>
 </body>
 </html>
