@@ -102,8 +102,99 @@
         .analysis-point { margin-bottom: 15px; padding-left: 12px; border-left: 4px solid #ccc; }
         .analysis-point b { color: #2c3e50; font-size: 1.05rem; }
         .footer-note { text-align:right; color:#888; font-size:0.85rem; margin-top:25px; border-top: 1px solid #eee; padding-top: 15px; }
+/* 추가 질문 버튼 스타일 */
+.deep-q-btn {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    float: right;
+    transition: 0.2s;
+    color: #666;
+}
+.deep-q-btn:hover { background: #e0e0e0; color: var(--primary); }
+
+/* 모달 레이아웃 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px);
+}
+.modal-card {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    position: relative;
+    animation: slideUp 0.3s ease-out;
+}
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.modal-header { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; font-weight: 800; font-size: 1.2rem; }
+.modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #999; }
+.modal-list { list-style: none; padding: 0; margin: 0; }
+.modal-list li { 
+    background: #f9f9f9; 
+    margin-bottom: 10px; 
+    padding: 12px 15px; 
+    border-radius: 8px; 
+    font-size: 0.95rem; 
+    line-height: 1.4;
+    border-left: 4px solid #ddd;
+}
+.modal-list li:hover { border-left-color: var(--primary); background: #f0f7ff; }
+
+/* 모달 리스트 아이템 스타일 수정 */
+.modal-list li { 
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #f9f9f9; 
+    margin-bottom: 10px; 
+    padding: 15px; 
+    border-radius: 8px; 
+    font-size: 0.95rem; 
+    line-height: 1.4;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* 체크박스 커스텀 */
+.modal-list input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: var(--primary); /* 체크박스 색상을 메인 테마색으로 */
+}
+
+/* 체크된 항목 스타일 */
+/* 체크된 항목 스타일: 줄 긋기 대신 글씨 흐리게 변경 */
+.modal-list li.checked {
+    background: #f1f3f5; /* 약간 더 차분한 회색 배경 */
+    border-left: 4px solid #ced4da; /* 강조색 대신 무채색 경계선 */
+    color: #adb5bd; /* 글자색을 흐리게(회색조) */
+    opacity: 0.7; /* 전체적인 투명도 조절 */
+    text-decoration: none; /* 기존 줄 긋기 제거 */
+    transition: all 0.3s ease;
+}
+
+/* 체크된 상태의 텍스트만 별도로 조절하고 싶을 때 */
+.modal-list li.checked span {
+    font-weight: 400; /* 글자 두께를 얇게 하여 더 가볍게 표현 */
+}
     </style>
 </head>
+
 <body>
 
 <div class="user-manager">
@@ -222,7 +313,7 @@
 
     <div id="resultView">
         <div id="captureArea">
-            <h1 style="text-align:center; margin-bottom:15px; text-decoration: underline;" id="resultTitle">TCI-140 분석 보고서</h1>
+            <h1 style="text-align:center; margin-bottom:15px; text-decoration: none;" id="resultTitle">TCI-140 분석 보고서</h1>
             <p style="text-align:center; color:#333; font-size:1.1rem; font-weight: 600; margin-bottom:40px;" id="reportDate"></p>
             
             <h2>1. 상위 척도 프로파일 (기질 및 성격)</h2>
@@ -285,11 +376,36 @@
     </div>
 </div>
 
+<div id="modalOverlay" class="modal-overlay" onclick="closeModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <div class="modal-header" id="modalHeader">심화 성찰 질문</div>
+        <ul class="modal-list" id="modalList"></ul>
+    </div>
+</div>
+
 <script>
 // 데이터 및 설정 로직
 const tciRawData = [
-    { id: 1, text: "쉬운 일보다는 도전적인 일이 더 좋다.", cat: "NS", sub: "NS1", rev: false },
-    { id: 2, text: "나를 좋게 대했던 사람들과도 친하게 지낸다.", cat: "RD", sub: "RD2", rev: false },
+{ 
+        id: 1, 
+        text: "쉬운 일보다는 도전적인 일이 더 좋다.", 
+        cat: "NS", sub: "NS1", rev: false,
+        reflections: [
+            "최근 내가 선택한 '도전적인 일'은 무엇이었나요?",
+            "그 도전을 시작할 때 설렘과 두려움 중 무엇이 더 컸나요?",
+            "실패 가능성이 90%라도 그 일이 가치 있다면 뛰어드실 건가요?",
+            "도전을 통해 얻고 싶은 핵심 욕구(성취, 성장, 재미 등)는?",
+            "PM으로서 팀원들에게도 이러한 도전을 권장하는 편인가요?"
+        ]
+    },
+    { id: 2, text: "나를 좋게 대했던 사람들과도 친하게 지낸다.", cat: "RD", sub: "RD2", rev: false,        reflections: [
+            "추가질문 1?",
+            "추가질문 2?",
+            "추가질문 3?",
+            "추가질문 4?",
+            "추가질문 5?",
+        ] },
     { id: 3, text: "음악을 듣거나 산책을 할 때 그 속에 빠져들어 나 자신을 잊는다.", cat: "ST", sub: "ST1", rev: false },
     { id: 4, text: "종종 실제보다 일이 더 어렵거나 위험할 것이라고 예상한다.", cat: "HA", sub: "HA1", rev: false },
     { id: 5, text: "내가 할 수 있는 한 더 잘 하고 싶기 때문에, 열심을 다해 나 자신을 몰아붙인다.", cat: "P", sub: "PS1", rev: false },
@@ -498,6 +614,7 @@ function deleteUser() {
 }
 function saveUserConfig() { localStorage.setItem('tci_user_list', JSON.stringify(users)); localStorage.setItem('tci_current_user', currentUser); }
 
+// 1. 질문 렌더링 함수 (수정됨)
 function renderQuestions() {
     const qContainer = document.getElementById('questionsContainer');
     qContainer.innerHTML = '';
@@ -506,7 +623,10 @@ function renderQuestions() {
         const div = document.createElement('div');
         div.className = 'question-card';
         div.innerHTML = `
-            <div class="q-text">${q.id}. ${q.text}</div>
+            <div style="overflow: hidden; margin-bottom: 15px;">
+                <button type="button" class="deep-q-btn" onclick="openModal(${q.id})">추가 질문</button>
+                <div class="q-text" style="margin: 0;">${q.id}. ${q.text}</div>
+            </div>
             <div class="options-guide"><span>전혀 아니다</span><span>매우 그렇다</span></div>
             <div class="options">
                 ${[0,1,2,3,4].map(v => `
@@ -519,6 +639,117 @@ function renderQuestions() {
         `;
         qContainer.appendChild(div);
     });
+}
+
+// 2. 모달 제어 및 질문 생성 함수 (추가됨)
+
+// openModal 함수 내 헤더 부분 수정
+function updateModalHeader(qId) {
+    const q = tciRawData.find(item => item.id === qId);
+    const currentScore = localStorage.getItem(`tci_${currentUser}_q${qId}`) || "0";
+    
+    document.getElementById('modalHeader').innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span>Q${qId} 추가질문</span>
+            <span id="liveScore" style="background:var(--primary); color:white; padding:2px 8px; border-radius:10px; font-size:0.8rem;">
+                현재 반영 점수: ${currentScore}점
+            </span>
+        </div>
+        <div style="font-size:0.9rem; margin-top:5px; color:#666; font-weight:normal;">"${q.text}"</div>
+    `;
+}
+
+function openModal(qId) {
+    const q = tciRawData.find(item => item.id === qId);
+    const header = document.getElementById('modalHeader');
+    const list = document.getElementById('modalList');
+    
+    header.innerHTML = `
+        <span style="color:var(--primary); font-size:0.9rem;">Q${qId} 추가질문</span><br>
+        <div style="font-size:1.05rem; margin-top:5px; color:#444;">"${q.text}"</div>
+    `;
+
+    // 질문 데이터 가져오기 (없으면 기본 질문)
+    const displayQuestions = q.reflections || [
+        `이 문항과 관련된 나의 구체적인 행동 '관찰'하기`,
+        `이때 내가 느꼈던 '감정'은 무엇이었나?`,
+        `이 이면에 숨겨진 나의 핵심 '욕구' 찾기`,
+        `PM 업무 상황에서 이 특성이 발현된 순간은?`,
+        `성숙한 통합을 위해 나에게 보낼 '부탁' 한마디`
+    ];
+
+    // 리스트 생성
+    list.innerHTML = displayQuestions.map((text, index) => {
+        // 저장된 체크 상태 확인 (선택 사항)
+        const isChecked = localStorage.getItem(`tci_${currentUser}_q${qId}_ref_${index}`) === 'true';
+        return `
+            <li class="${isChecked ? 'checked' : ''}" onclick="toggleReflection(${qId}, ${index}, this)">
+                <input type="checkbox" ${isChecked ? 'checked' : ''} onclick="event.stopPropagation()">
+                <span>${text}</span>
+            </li>
+        `;
+    }).join('');
+
+    document.getElementById('modalOverlay').style.display = 'flex';
+}
+
+// 체크박스 토글 함수
+// 체크박스 토글 및 문항 점수 자동 업데이트
+// 체크박스 토글 및 PM 지정 점수 로직 자동 업데이트
+function toggleReflection(qId, index, element) {
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    
+    if (checkbox.checked) {
+        element.classList.add('checked');
+    } else {
+        element.classList.remove('checked');
+    }
+
+    // 1. 성찰 질문 체크 상태 개별 저장
+    localStorage.setItem(`tci_${currentUser}_q${qId}_ref_${index}`, checkbox.checked);
+
+    // 2. 현재 문항의 총 체크 개수 확인
+    let checkCount = 0;
+    for (let i = 0; i < 5; i++) {
+        if (localStorage.getItem(`tci_${currentUser}_q${qId}_ref_${i}`) === 'true') {
+            checkCount++;
+        }
+    }
+
+    // 3. PM 지정 점수 변환 로직 (0-1:0, 2:1, 3:2, 4:3, 5:4)
+    let finalScore;
+    if (checkCount <= 1) {
+        finalScore = 0;
+    } else if (checkCount === 2) {
+        finalScore = 1;
+    } else if (checkCount === 3) {
+        finalScore = 2;
+    } else if (checkCount === 4) {
+        finalScore = 3;
+    } else { // 5개 전부 선택
+        finalScore = 4;
+    }
+
+    // 4. 메인 데이터 저장 및 UI 동기화
+    localStorage.setItem(`tci_${currentUser}_q${qId}`, finalScore.toString());
+
+    // 메인 화면의 라디오 버튼 시각적 업데이트
+    const radioBtn = document.querySelector(`input[name="q${qId}"][value="${finalScore}"]`);
+    if (radioBtn) {
+        radioBtn.checked = true;
+    }
+
+    // 헤더 점수 표시 실시간 업데이트
+    const scoreDisplay = document.getElementById('liveScore');
+    if (scoreDisplay) {
+        scoreDisplay.innerText = `현재 반영 점수: ${finalScore}점`;
+    }
+
+    updateProgress();
+}
+function closeModal() {
+    document.getElementById('modalOverlay').style.display = 'none';
 }
 
 function updateUIForUser() { document.getElementById('currentUserDisplay').innerText = `현재 검사 진행자: ${currentUser}`; updateProgress(); }
