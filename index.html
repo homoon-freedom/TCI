@@ -41,6 +41,17 @@
         .opt-item label { display: block; background: #f0f2f5; padding: 12px 0; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: 0.2s; border: 1px solid #ccc; font-weight: bold; color: #555; }
         .opt-item input:checked + label { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 2px 5px rgba(74,144,226,0.4); }
 
+        /* 이론 가이드 섹션 스타일 */
+        .theory-guide-section { width: 100%; max-width: 100%; margin: 40px 0; }
+        .toggle-guide-btn { width: 100%; padding: 18px; background: #444; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
+        .toggle-guide-btn:hover { background: #555; }
+        .theory-content { display: none; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); line-height: 1.8; text-align: left; box-sizing: border-box; margin-top: 15px; }
+        .theory-card { margin-bottom: 30px; border-radius: 8px; overflow: hidden; }
+        .theory-card h3 { margin: 0; padding: 12px 18px; font-size: 1.15rem; }
+        .theory-card p { padding: 15px 18px 5px; margin: 0; font-weight: 600; color: #444; }
+        .theory-card ul { padding: 0 18px 18px 35px; margin: 0; }
+        .theory-card li { margin-bottom: 5px; }
+
         /* 결과 보기 영역 */
         #resultView { display: none; margin-top: 40px; width: 100%; flex-direction: column; align-items: center; }
         #captureArea { background: white; padding: 50px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); width: 1100px; color: var(--text-main); box-sizing: border-box; }
@@ -78,12 +89,11 @@
         .line-70 { left: 70%; border-left: 1px dashed #666; }
 
         .submit-btn, .save-btn, .reset-btn { padding: 20px; border: none; border-radius: 12px; font-size: 1.2rem; font-weight: 800; cursor: pointer; margin-bottom: 15px; transition: 0.2s; box-sizing: border-box; }
-        .submit-btn { background: var(--primary); color: white; margin-top: 30px; box-shadow: 0 4px 10px rgba(74,144,226,0.3); width: 100%; max-width: 600px; }
+        .submit-btn { background: var(--primary); color: white; margin-top: 10px; box-shadow: 0 4px 10px rgba(74,144,226,0.3); width: 100%; max-width: 600px; }
         .save-btn { background: #000; color: white; width: 1100px; margin-top: 25px; margin-bottom: 50px; }
         .reset-btn { background: #eee; color: #333; font-size: 0.95rem; padding: 12px 25px; font-weight: 600; width: auto; }
         .interpretation-box { background: #f1f3f5; padding: 25px; border-radius: 10px; font-size: 1rem; line-height: 1.8; border: 1px solid #ddd; text-align: left; }
         
-        /* 심층 가이드 추가 스타일 */
         .guide-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
         .guide-table th { background: #4A90E2 !important; color: white !important; border: 1px solid #357ABD; }
         .guide-table td { text-align: left; padding: 15px; vertical-align: top; border: 1px solid #eee; }
@@ -115,6 +125,98 @@
 
     <form id="tciForm">
         <div id="questionsContainer" style="width: 100%;"></div>
+
+        <div class="theory-guide-section">
+            <button type="button" class="toggle-guide-btn" onclick="toggleTheoryGuide()">
+                💡 TCI 척도별 상세 이론 가이드 (보기/숨기기)
+            </button>
+            <div id="theoryContent" class="theory-content">
+                <h2 style="color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 10px; border-left: none;">[ 기질 Temperament : 타고난 엔진 ]</h2>
+                <p style="color: #666; font-size: 0.95rem; margin-bottom: 25px;">기질은 유전적으로 타고난 생물학적 반응 경향성으로, 뇌의 신경전달물질 시스템과 연결됩니다.</p>
+
+                <div class="theory-card" style="margin-bottom: 30px;">
+                    <h3 style="background: #eef7ff; border-left: 5px solid #4A90E2;">1. 자극추구 (Novelty Seeking) → 도파민(Dopamine)</h3>
+                    <p>자동차의 '가속 페달(엑셀)' 역할입니다. 새로운 자극에 행동이 활성화됩니다.</p>
+                    <ul>
+                        <li><b>NS1 탐색적 흥분:</b> 새로운 장소나 아이디어에 대한 호기심</li>
+                        <li><b>NS2 충동성:</b> 즉각적인 결정과 기분에 따른 행동</li>
+                        <li><b>NS3 무절제:</b> 에너지와 자원을 아끼지 않는 소비/표현</li>
+                        <li><b>NS4 자유분방:</b> 규율이나 제약을 답답해하는 성향</li>
+                    </ul>
+                </div>
+
+                <div class="theory-card" style="margin-bottom: 30px;">
+                    <h3 style="background: #fff0f0; border-left: 5px solid #ff6b6b;">2. 위험회피 (Harm Avoidance) → 세로토닌(Serotonin)</h3>
+                    <p>자동차의 '브레이크' 역할입니다. 잠재적 위험 앞에서 행동이 억제됩니다.</p>
+                    <ul>
+                        <li><b>HA1 예기불안:</b> 미래에 일어날 일에 대한 미리 걱정</li>
+                        <li><b>HA2 불확실성 두려움:</b> 낯선 상황이나 정해지지 않은 상태에 대한 긴장</li>
+                        <li><b>HA3 사회적 억제:</b> 낯선 사람 앞에서 느끼는 수줍음</li>
+                        <li><b>HA4 쉽게 지침:</b> 심리적 긴장으로 인한 빠른 에너지 고갈</li>
+                    </ul>
+                </div>
+
+                <div class="theory-card" style="margin-bottom: 30px;">
+                    <h3 style="background: #f8f0ff; border-left: 5px solid #ae3ec9;">3. 사회적 민감성 (Reward Dependence) → 노르에피네프린</h3>
+                    <p>관계를 유지하게 하는 '안테나' 역할입니다. 타인의 반응과 보상에 민감합니다.</p>
+                    <ul>
+                        <li><b>RD1 사회적 감수성:</b> 타인의 감정을 읽는 공감 능력</li>
+                        <li><b>RD2 의존성:</b> 정서적 유대를 맺으려는 욕구</li>
+                        <li><b>RD3 인정 욕구:</b> 타인의 평가와 승인에 대한 민감도</li>
+                        <li><b>RD4 친밀감:</b> 인간관계에서의 따스함과 거리 조절</li>
+                    </ul>
+                </div>
+
+                <div class="theory-card" style="margin-bottom: 40px;">
+                    <h3 style="background: #fff9db; border-left: 5px solid #fcc419;">4. 인내력 (Persistence) → 글루타메이트/도파민</h3>
+                    <p>목적지까지 달리게 하는 '뒷심'입니다. 보상 없이도 행동을 지속합니다.</p>
+                    <ul>
+                        <li><b>P1 근면성:</b> 일을 시작할 때의 열정과 노력</li>
+                        <li><b>P2 끈기:</b> 좌절이 닥쳐도 끝을 보려는 의지</li>
+                        <li><b>P3 성취욕:</b> 더 높은 목표를 향한 도전과 자기 채찍질</li>
+                        <li><b>P4 완벽주의:</b> 사소한 디테일까지 철저히 마무리하려는 성향</li>
+                    </ul>
+                </div>
+
+                <h2 style="color: #2b8a3e; border-bottom: 2px solid #2b8a3e; padding-bottom: 10px; margin-top: 50px; border-left: none;">[ 성격 Character : 내가 가꾸는 운전 기술 ]</h2>
+                <p style="color: #666; font-size: 0.95rem; margin-bottom: 25px;">성격은 환경과 노력을 통해 형성되는 자기 개념이며, 변화하고 성숙할 수 있습니다.</p>
+
+                <div class="theory-card" style="margin-bottom: 30px;">
+                    <h3 style="background: #f4fce3; border-left: 5px solid #2b8a3e;">1. 자율성 (Self-Directedness) : 나와의 관계</h3>
+                    <p>자신을 얼마나 잘 통제하고 주도적으로 나아가는가를 측정합니다.</p>
+                    <ul>
+                        <li><b>SD1 책임감:</b> 자신의 선택과 결과에 대한 주체성</li>
+                        <li><b>SD2 목적의식:</b> 삶의 방향성과 목표 설정 능력</li>
+                        <li><b>SD3 유능감:</b> 문제 해결에 대한 자기 효능감</li>
+                        <li><b>SD4 자기수용:</b> 자신의 한계를 인정하고 존중함</li>
+                        <li><b>SD5 자기일치:</b> 가치관과 실제 행동의 일치 (좋은 습관)</li>
+                    </ul>
+                </div>
+
+                <div class="theory-card" style="margin-bottom: 30px;">
+                    <h3 style="background: #fff4e6; border-left: 5px solid #fd7e14;">2. 연대감 (Cooperativeness) : 타인과의 관계</h3>
+                    <p>자신을 사회의 일부로 수용하고 타인과 협력하는 방식입니다.</p>
+                    <ul>
+                        <li><b>C1 타인수용:</b> 타인의 단점이나 다름을 받아들이는 태도</li>
+                        <li><b>C2 공감:</b> 타인의 상태를 읽고 함께 느끼는 역지사지</li>
+                        <li><b>C3 이타성:</b> 공동의 이익을 생각하고 친절을 베푸는 의지</li>
+                        <li><b>C4 관용:</b> 갈등 상황에서의 용서와 화해 능력</li>
+                        <li><b>C5 공정성:</b> 원칙 준수와 인간적인 예우</li>
+                    </ul>
+                </div>
+
+                <div class="theory-card" style="margin-bottom: 30px;">
+                    <h3 style="background: #f3f0ff; border-left: 5px solid #7950f2;">3. 자기초월 (Self-Transcendence) : 세상과의 관계</h3>
+                    <p>나를 넘어선 우주, 자연, 영성과의 연결성을 다룹니다.</p>
+                    <ul>
+                        <li><b>ST1 창조적 자기망각:</b> 무언가에 완전히 몰입하여 나를 잊는 경험</li>
+                        <li><b>ST2 우주적 일체감:</b> 만물이 하나로 연결되어 있다는 느낌</li>
+                        <li><b>ST3 영적 수용:</b> 눈에 보이지 않는 초월적 가치에 대한 수용</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <button type="submit" class="submit-btn">결과 분석 리포트 생성 (미응답 자동 처리)</button>
     </form>
 
@@ -156,7 +258,7 @@
                         <th rowspan="2">하위 척도</th>
                         <th rowspan="2">원점수</th>
                         <th rowspan="2">규준집단<br>M (SD)</th>
-                        <th>낮은 점수</th>
+                        <th rowspan="2">낮은 점수</th>
                         <th style="padding: 0; position: relative;">
                             <div style="font-size: 0.95rem; padding: 5px; border-bottom: 1px solid #bbb;">점수 분포</div>
                             <div style="display: flex; width: 100%; font-weight: normal; color: #666; font-size: 0.75rem;">
@@ -165,7 +267,7 @@
                                 <div style="width: 33.33%; text-align: center;">높음</div>
                             </div>
                         </th>
-                        <th>높은 점수</th>
+                        <th rowspan="2">높은 점수</th>
                     </tr>
                 </thead>
                 <tbody id="subBody"></tbody>
@@ -184,6 +286,7 @@
 </div>
 
 <script>
+// 데이터 및 설정 로직
 const tciRawData = [
     { id: 1, text: "쉬운 일보다는 도전적인 일이 더 좋다.", cat: "NS", sub: "NS1", rev: false },
     { id: 2, text: "나를 좋게 대했던 사람들과도 친하게 지낸다.", cat: "RD", sub: "RD2", rev: false },
@@ -434,6 +537,16 @@ function resetCurrentAnswers() {
     }
 }
 
+// 이론 가이드 토글 함수
+function toggleTheoryGuide() {
+    const content = document.getElementById('theoryContent');
+    if (content.style.display === 'block') {
+        content.style.display = 'none';
+    } else {
+        content.style.display = 'block';
+    }
+}
+
 document.getElementById('tciForm').onsubmit = function(e) {
     e.preventDefault();
     for (let i = 1; i <= 140; i++) { if (!localStorage.getItem(`tci_${currentUser}_q${i}`)) localStorage.setItem(`tci_${currentUser}_q${i}`, "2"); }
@@ -527,28 +640,18 @@ function renderResult(scores) {
     setTimeout(() => { window.scrollTo({ top: resultView.offsetTop - 100, behavior: 'smooth' }); }, 100);
 }
 
-// [함수] 실제 점수 기반 정밀 해석 엔진 (업로드 보고서 원문 데이터 이식)
 function generateDetailedAnalysis(scores) {
     let html = "";
-    
     const getStats = (key) => {
         const meta = scaleMeta[key];
         const raw = scores.main[key] || 0;
         const z = (raw - meta.m) / meta.sd;
-        return {
-            t: Math.round(50 + 10 * z),
-            pct: Math.round(normalCDF(z) * 100)
-        };
+        return { t: Math.round(50 + 10 * z), pct: Math.round(normalCDF(z) * 100) };
     };
 
-    const ns = getStats('NS');
-    const ha = getStats('HA');
-    const rd = getStats('RD');
-    const sd = getStats('SD');
-    const co = getStats('CO');
-    const st = getStats('ST');
+    const ns = getStats('NS'); const ha = getStats('HA'); const rd = getStats('RD');
+    const sd = getStats('SD'); const co = getStats('CO'); const st = getStats('ST');
 
-    // 기질 유형 판정 (H/L)
     const nsTag = ns.t >= 50 ? 'H' : 'L';
     const haTag = ha.t >= 50 ? 'H' : 'L';
     const rdTag = rd.t >= 50 ? 'H' : 'L';
@@ -556,27 +659,22 @@ function generateDetailedAnalysis(scores) {
 
     html += `<div class="tip-box" style="background:#fff9db; border-left-color:#fcc419;">
                 <strong>🌱 기질로 알아보는 내 모습 (유형: ${temperamentType})</strong>
-                <p style="font-size: 0.95rem; color: #666; margin-bottom: 15px;">기질이란 유전적으로 타고난 자동적인 반응을 의미하며, 무엇이 좋다 나쁘다를 비교할 수 없는 고유한 속성입니다.</p>`;
+                <p style="font-size: 0.95rem; color: #666; margin-bottom: 15px;">기질은 타고난 자동 반응입니다. (유형: ${temperamentType})</p>`;
 
-    // 보고서 원문 기반 조합형 해석
     if (ns.t >= 50 && ha.t >= 50) {
-        html += `<div class="analysis-point">• <b>신중한 탐험가:</b> 새롭고 낯선 환경에 호기심이 많은 동시에 위험을 잘 판단하는 조심성을 두루 갖추고 있습니다. 무언가를 시도하고 싶은 마음과 안전을 위해 조심하고 싶은 마음 사이에서 내면의 갈등을 경험할 수 있습니다.</div>`;
+        html += `<div class="analysis-point">• <b>신중한 탐험가:</b> 호기심이 많은 동시에 위험을 잘 판단하는 조심성을 두루 갖추고 있습니다.</div>`;
     } else if (ns.t >= 50 && ha.t < 50) {
-        html += `<div class="analysis-point">• <b>자유로운 모험가:</b> 호기심이 많고 즉각적인 자극을 추구하며 위험에 대한 걱정이 적어 추진력이 강합니다.</div>`;
+        html += `<div class="analysis-point">• <b>자유로운 모험가:</b> 호기심이 많고 즉각적인 자극을 추구하며 추진력이 강합니다.</div>`;
     }
 
     if (rd.t < 50) {
-        html += `<div class="analysis-point">• <b>독립적 의지:</b> 주변 사람들의 반응에 크게 흔들리지 않으며, 자신의 감정이나 문제는 스스로 다루는 게 낫다고 믿는 면이 있습니다.</div>`;
+        html += `<div class="analysis-point">• <b>독립적 의지:</b> 주변 반응에 흔들리지 않으며, 자신의 감정이나 문제는 스스로 다루는 게 낫다고 믿습니다.</div>`;
     } else {
-        html += `<div class="analysis-point">• <b>따뜻한 공감자:</b> 타인의 감정에 민감하고 정서적 유대감을 중요하게 생각하며 협력적입니다.</div>`;
+        html += `<div class="analysis-point">• <b>따뜻한 공감자:</b> 타인의 감정에 민감하고 정서적 유대감을 중요하게 생각합니다.</div>`;
     }
     
-    html += `<div style="background:rgba(255,255,255,0.5); border-radius: 4px; padding:10px; margin-top:10px; font-size: 0.9rem;">
-                <b>💡 나의 기질 수용하기:</b> 강렬한 감정이라도 결국 파도처럼 밀려가는 것을 지켜보세요. 자신의 마음 상태를 들여다보는 것만으로도 동요가 잠잠해집니다.
-             </div>
-    </div>`;
+    html += `</div>`;
 
-    // 성격 유형 판정 (H/L)
     const sdTag = sd.t >= 50 ? 'H' : 'L';
     const coTag = co.t >= 50 ? 'H' : 'L';
     const stTag = st.t >= 50 ? 'H' : 'L';
@@ -584,32 +682,28 @@ function generateDetailedAnalysis(scores) {
 
     html += `<div class="tip-box" style="background:#e8f4fd; border-left-color:#4A90E2; margin-top:20px;">
                 <strong>💎 성격으로 알아보는 내 모습 (유형: ${characterType})</strong>
-                <p style="font-size: 0.95rem; color: #666; margin-bottom: 15px;">성격이란 중요하게 추구하는 목표 및 가치에서의 차이를 의미하며, 살아가면서 가꾸고 변화시킬 수 있습니다.</p>`;
+                <p style="font-size: 0.95rem; color: #666; margin-bottom: 15px;">성격은 가치관에 따른 선택입니다. (유형: ${characterType})</p>`;
     
     if (sd.t < 50) {
-        html += `<div class="analysis-point">• <b>자율성 성찰:</b> 현재 자신의 모습이 만족스럽지 않거나 삶의 방향에 대해 고민하고 있을 수 있습니다. 삶의 주도권을 잃게 되면 자신감이 낮아질 수 있으니 주의가 필요합니다.</div>`;
+        html += `<div class="analysis-point">• <b>자율성 성찰:</b> 현재 자신의 모습이나 삶의 방향에 대해 고민하고 있을 수 있습니다.</div>`;
     } else {
         html += `<div class="analysis-point">• <b>자기 주도성:</b> 스스로에 대한 책임감이 강하고 목표를 향해 나아가는 힘이 탁월합니다.</div>`;
     }
 
     if (co.t < 50) {
-        html += `<div class="analysis-point">• <b>경계와 수용:</b> 나와 타자의 경계가 분명한 편으로, 내 울타리 안의 사람들을 최우선으로 여깁니다. 경계 밖의 사람들에게는 다소 무신경해 보일 수 있습니다.</div>`;
+        html += `<div class="analysis-point">• <b>경계와 수용:</b> 나와 타자의 경계가 분명한 편으로, 실리적인 면이 강조됩니다.</div>`;
     }
 
     if (st.t >= 50) {
-        html += `<div class="analysis-point">• <b>자기초월적 통찰:</b> 삶의 모호함과 불확실함을 받아들이는 겸손한 사람입니다. 자신만의 세계나 예술, 영적 경험에서 위로를 얻기도 합니다.</div>`;
+        html += `<div class="analysis-point">• <b>자기초월적 통찰:</b> 삶의 모호함과 불확실함을 받아들이는 겸손한 사람입니다.</div>`;
     }
     
-    html += `<div style="background:rgba(255,255,255,0.5); border-radius: 4px; padding:10px; margin-top:10px; font-size: 0.9rem;">
-                <b>💡 나의 성격 가꾸기:</b> 현재 가라앉은 기분에 젖어 있지는 않은지 마음을 살펴봐 주세요. 스트레스나 갈등이 있다면 이를 보듬는 것이 우선입니다.
-             </div>
-    </div>`;
+    html += `</div>`;
 
-    // 긴급 상담 가이드 (백분위 하위 10% 기준)
     if (sd.pct <= 10 || co.pct <= 10) {
         html += `<div class="tip-box" style="background:#fff0f0; border-left-color:#ff6b6b; margin-top:20px;">
                     <strong style="color:#d32f2f;">⚠️ 마음 살핌 우선 가이드</strong>
-                    <p>현재 무력감이나 우울감을 깊게 경험하고 있는 상태일 수 있습니다. 혼자 견디기보다 <b>비폭력 대화(NVC)</b>를 통해 자신의 욕구를 비난 없이 바라보거나 전문가의 도움을 받는 것을 권장합니다.</p>
+                    <p>현재 심리적 소모가 클 수 있습니다. <b>비폭력 대화(NVC)</b>를 통해 자신의 욕구를 비난 없이 바라보세요.</p>
                 </div>`;
     }
 
@@ -625,44 +719,22 @@ function renderDeepGuide(customAnalysis) {
         <h2 style="margin-top:40px;">4. 척도별 성장 가이드 및 실천 제안</h2>
         <table class="guide-table">
             <thead>
-                <tr>
-                    <th style="width:20%">척도</th>
-                    <th>높음/낮음의 특징</th>
-                    <th>실천적 개선 제안</th>
-                </tr>
+                <tr><th style="width:20%">척도</th><th>높음/낮음 특징</th><th>실천적 개선 제안</th></tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><strong>자극추구(NS)</strong></td>
-                    <td><strong>높음:</strong> 열정적, 즉흥적<br><strong>낮음:</strong> 신중함, 절제력</td>
-                    <td>높을 때: 행동 전 '10초 멈춤' 연습. 주간 예산/계획 수립.<br>낮을 때: 가끔은 익숙하지 않은 새로운 길로 산책하기.</td>
-                </tr>
-                <tr>
-                    <td><strong>위험회피(HA)</strong></td>
-                    <td><strong>높음:</strong> 세밀함, 리스크 대비<br><strong>낮음:</strong> 낙천적, 자신감</td>
-                    <td>높을 때: 불안할 때 '최악의 확률' 객관화하기. 근이완법.<br>낮을 때: 세부 점검 리스트 활용 습관화.</td>
-                </tr>
-                <tr>
-                    <td><strong>자율성(SD)</strong></td>
-                    <td><strong>높음:</strong> 주도적, 책임감<br><strong>낮음:</strong> 무력감, 방향 상실</td>
-                    <td>보완 팁: NVC를 통한 욕구 수용. '내가 선택한 작은 성공' 매일 3가지 기록.</td>
-                </tr>
-                <tr>
-                    <td><strong>연대감(CO)</strong></td>
-                    <td><strong>높음:</strong> 공감, 협력적<br><strong>낮음:</strong> 자기중심, 비판적</td>
-                    <td>보완 팁: I-Message 활용. "너는 왜 그래?" 대신 "내 생각에는 ~해서 ~를 원해"라고 말하기.</td>
-                </tr>
+                <tr><td><strong>자극추구(NS)</strong></td><td>열정/신중</td><td>높을 때: '10초 멈춤' 연습. 낮을 때: 새로운 길 산책.</td></tr>
+                <tr><td><strong>위험회피(HA)</strong></td><td>세밀/낙천</td><td>높을 때: 불안 객관화(최악의 확률). 낮을 때: 리스트 활용.</td></tr>
+                <tr><td><strong>자율성(SD)</strong></td><td>주도/무력</td><td>보완: NVC 욕구 수용. 매일 '작은 성공' 3가지 기록.</td></tr>
+                <tr><td><strong>연대감(CO)</strong></td><td>공감/독립</td><td>보완: I-Message 활용. 타인의 긍정적 의도 찾아보기.</td></tr>
             </tbody>
         </table>
 
         <div class="interpretation-box" style="margin-top:35px; background:#f8f9fa; border: 1px dashed #ccc;">
             <strong>💡 PM님을 위한 통합 제안</strong><br>
-            TCI 점수는 선악을 결정하지 않습니다. 기질은 나의 **'엔진'**으로 이해하고 수용하며, 성격은 내가 닦아나가는 **'운전 기술'**로 생각하세요. 부족하다고 느껴지는 성격 척도는 매일의 성찰과 NVC 연습을 통해 충분히 변화시킬 수 있습니다.
+            TCI는 점수의 높고 낮음보다 '나를 어떻게 활용할 것인가'가 중요합니다. 기질은 나의 타고난 <b>'연료'</b>로 인정하고, 성격은 내가 가꾸는 <b>'주행 습관'</b>으로 관리해 보세요.
         </div>
         
-        <div class="footer-note">
-            * 본 분석 가이드는 TCI 이론과 심리학적 통계를 바탕으로 구성되었습니다. 모든 권리는 사용자에게 있습니다.
-        </div>
+        <div class="footer-note">* 본 분석은 TCI 이론과 심리학적 통계를 바탕으로 구성되었습니다.</div>
     `;
 }
 
@@ -675,46 +747,21 @@ function normalCDF(z) {
 
 async function saveImage() {
     const captureArea = document.getElementById('captureArea');
-    
-    // 1. 결과물을 캔버스로 캡처
-    const canvas = await html2canvas(captureArea, { 
-        scale: 2, 
-        useCORS: true, 
-        backgroundColor: "#ffffff" 
-    });
-
-    // 2. 캔버스를 Blob 데이터로 변환 (이미지 파일화)
+    const canvas = await html2canvas(captureArea, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
     canvas.toBlob(async (blob) => {
         const fileName = `TCI_REPORT_${currentUser}_${new Date().toISOString().slice(0,10)}.png`;
         const file = new File([blob], fileName, { type: 'image/png' });
-
-        // 3. 시스템 공유 기능(Web Share API) 지원 여부 확인
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-                await navigator.share({
-                    files: [file],
-                    title: 'TCI 분석 리포트',
-                    text: `${currentUser}님의 TCI-140 분석 결과 보고서입니다.`
-                });
-            } catch (err) {
-                console.error("공유 실패:", err);
-                // 사용자가 공유를 취소한 것이 아니라면 일반 다운로드 실행
-                if(err.name !== 'AbortError') saveFallback(canvas, fileName);
-            }
-        } else {
-            // 4. 공유 기능을 지원하지 않는 환경(PC 등)에서는 기존 다운로드 방식 실행
-            saveFallback(canvas, fileName);
-        }
+            try { await navigator.share({ files: [file], title: 'TCI 분석 리포트', text: `${currentUser}님의 TCI 분석 결과입니다.` }); } 
+            catch (err) { if(err.name !== 'AbortError') saveFallback(canvas, fileName); }
+        } else { saveFallback(canvas, fileName); }
     }, 'image/png');
 }
 
-// 기존 다운로드 방식 (Fallback)
 function saveFallback(canvas, fileName) {
     const link = document.createElement('a');
-    link.download = fileName;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-    alert("이미지가 저장되었습니다. 갤러리에서 확인 후 카카오톡으로 공유해주세요.");
+    link.download = fileName; link.href = canvas.toDataURL("image/png"); link.click();
+    alert("이미지가 저장되었습니다.");
 }
 
 initApp();
