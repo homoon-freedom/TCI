@@ -35,66 +35,67 @@
         .q-text { font-size: 1.15rem; font-weight: 700; margin-bottom: 20px; color: var(--text-bold); }
         
         .options-guide { display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; margin-bottom: 12px; padding: 0 10px; font-weight: 600; }
+        
         /* 문항 선택 영역 레이아웃 */
-/* 문항 선택 영역 레이아웃 */
-.options { 
-    display: flex; 
-    justify-content: space-between; 
-    gap: 5px; 
-    padding: 15px 0;
-}
+        .options { 
+            display: flex; 
+            justify-content: space-between; 
+            gap: 5px; 
+            padding: 15px 0;
+        }
 
-.opt-item { 
-    flex: 1; 
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    min-width: 0; /* 글자 넘침 방지 */
-}
+        .opt-item { 
+            flex: 1; 
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            min-width: 0; /* 글자 넘침 방지 */
+        }
 
-/* 동그란 라디오 버튼 스타일 */
-.opt-item input[type="radio"] { 
-    appearance: none; 
-    -webkit-appearance: none;
-    width: 30px;
-    height: 30px;
-    border: 2px solid #ced4da;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin: 0;
-}
+        /* 동그란 라디오 버튼 스타일 */
+        .opt-item input[type="radio"] { 
+            appearance: none; 
+            -webkit-appearance: none;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #ced4da;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0;
+        }
 
-/* 체크 시 스타일 (동그라미 내부 채워짐) */
-.opt-item input[type="radio"]:checked {
-    border-color: var(--primary);
-    background: white;
-    border-width: 7px;
-}
+        /* 체크 시 스타일 (동그라미 내부 채워짐) */
+        .opt-item input[type="radio"]:checked {
+            border-color: var(--primary);
+            background: white;
+            border-width: 7px;
+        }
 
-/* 텍스트 라벨 스타일 (0~4 대신 한글) */
-.opt-item label { 
-    display: block; 
-    background: none !important;
-    border: none !important;
-    padding: 0 !important;
-    cursor: pointer; 
-    font-size: 0.85rem; /* 글자가 많으므로 크기를 살짝 줄임 */
-    font-weight: 600; 
-    color: #777; 
-    text-align: center;
-    word-break: keep-all; /* 단어 단위 줄바꿈 */
-    line-height: 1.2;
-}
+        /* 텍스트 라벨 스타일 */
+        .opt-item label { 
+            display: block; 
+            background: none !important;
+            border: none !important;
+            padding: 0 !important;
+            cursor: pointer; 
+            font-size: 0.85rem; 
+            font-weight: 600; 
+            color: #777; 
+            text-align: center;
+            word-break: keep-all; 
+            line-height: 1.2;
+        }
 
-/* 체크 시 글자 강조 */
-.opt-item input:checked + label { 
-    color: var(--primary);
-    font-weight: 800;
-}
+        /* 체크 시 글자 강조 */
+        .opt-item input:checked + label { 
+            color: var(--primary);
+            font-weight: 800;
+        }
+
         /* 이론 가이드 섹션 스타일 */
         .theory-guide-section { width: 100%; max-width: 100%; margin: 40px 0; }
         .toggle-guide-btn { width: 100%; padding: 18px; background: #444; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
@@ -156,96 +157,87 @@
         .analysis-point { margin-bottom: 15px; padding-left: 12px; border-left: 4px solid #ccc; }
         .analysis-point b { color: #2c3e50; font-size: 1.05rem; }
         .footer-note { text-align:right; color:#888; font-size:0.85rem; margin-top:25px; border-top: 1px solid #eee; padding-top: 15px; }
-/* 추가 질문 버튼 스타일 */
-.deep-q-btn {
-    background: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    float: right;
-    transition: 0.2s;
-    color: #666;
-}
-.deep-q-btn:hover { background: #e0e0e0; color: var(--primary); }
 
-/* 모달 레이아웃 */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
-    z-index: 2000;
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(3px);
-}
-.modal-card {
-    background: white;
-    width: 90%;
-    max-width: 500px;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    position: relative;
-    animation: slideUp 0.3s ease-out;
-}
-@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* 추가 질문 버튼 스타일 */
+        .deep-q-btn {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            float: right;
+            transition: 0.2s;
+            color: #666;
+        }
+        .deep-q-btn:hover { background: #e0e0e0; color: var(--primary); }
 
-.modal-header { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; font-weight: 800; font-size: 1.2rem; }
-.modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #999; }
-.modal-list { list-style: none; padding: 0; margin: 0; }
-.modal-list li { 
-    background: #f9f9f9; 
-    margin-bottom: 10px; 
-    padding: 12px 15px; 
-    border-radius: 8px; 
-    font-size: 0.95rem; 
-    line-height: 1.4;
-    border-left: 4px solid #ddd;
-}
-.modal-list li:hover { border-left-color: var(--primary); background: #f0f7ff; }
+        /* 모달 레이아웃 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+        .modal-card {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-/* 모달 리스트 아이템 스타일 수정 */
-.modal-list li { 
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    background: #f9f9f9; 
-    margin-bottom: 10px; 
-    padding: 15px; 
-    border-radius: 8px; 
-    font-size: 0.95rem; 
-    line-height: 1.4;
-    cursor: pointer;
-    transition: 0.2s;
-}
+        .modal-header { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; font-weight: 800; font-size: 1.2rem; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #999; }
+        .modal-list { list-style: none; padding: 0; margin: 0; }
+        
+        /* 모달 리스트 아이템 스타일 */
+        .modal-list li { 
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #f9f9f9; 
+            margin-bottom: 10px; 
+            padding: 15px; 
+            border-radius: 8px; 
+            font-size: 0.95rem; 
+            line-height: 1.4;
+            cursor: pointer;
+            transition: 0.2s;
+            border-left: 4px solid #ddd;
+        }
+        .modal-list li:hover { border-left-color: var(--primary); background: #f0f7ff; }
 
-/* 체크박스 커스텀 */
-.modal-list input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    margin-top: 2px;
-    cursor: pointer;
-    accent-color: var(--primary); /* 체크박스 색상을 메인 테마색으로 */
-}
+        /* 체크박스 커스텀 */
+        .modal-list input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
 
-/* 체크된 항목 스타일 */
-/* 체크된 항목 스타일: 줄 긋기 대신 글씨 흐리게 변경 */
-.modal-list li.checked {
-    background: #f1f3f5; /* 약간 더 차분한 회색 배경 */
-    border-left: 4px solid #ced4da; /* 강조색 대신 무채색 경계선 */
-    color: #adb5bd; /* 글자색을 흐리게(회색조) */
-    opacity: 0.7; /* 전체적인 투명도 조절 */
-    text-decoration: none; /* 기존 줄 긋기 제거 */
-    transition: all 0.3s ease;
-}
+        /* 체크된 항목 스타일 */
+        .modal-list li.checked {
+            background: #f1f3f5; 
+            border-left: 4px solid #ced4da; 
+            color: #adb5bd; 
+            opacity: 0.7; 
+            text-decoration: none; 
+            transition: all 0.3s ease;
+        }
 
-/* 체크된 상태의 텍스트만 별도로 조절하고 싶을 때 */
-.modal-list li.checked span {
-    font-weight: 400; /* 글자 두께를 얇게 하여 더 가볍게 표현 */
-}
+        .modal-list li.checked span {
+            font-weight: 400; 
+        }
     </style>
 </head>
 
@@ -439,7 +431,6 @@
 </div>
 
 <script>
-// 데이터 및 설정 로직
 const tciRawData = [
 { 
     id: 1, 
@@ -700,7 +691,7 @@ const tciRawData = [
         "나쁜 상황을 자주 상상하나요?",
         "실수할까 봐 걱정이 많나요?",
         "부정적인 결과를 먼저 떠올리나요?",
-        "걱정이 반복되는 편인가요?"
+        "걱정 값이 반복되는 편인가요?"
     ]
 },
 
@@ -949,8 +940,6 @@ reflections: ["상대 입장에서 생각하나요?","공감하려 노력하나�
 { id: 50, text: "계획했던 일을 추진하기 위해 내 자신의 힘을 한데 모으기 힘들 때가 종종 있다.", cat: "SD", sub: "SD2", rev: true,
 reflections: ["계획 실행이 어려운가요?","집중하기 힘든가요?","의지가 쉽게 흔들리나요?","일을 미루는 편인가요?"]},
 
-// ↓↓↓ 같은 패턴으로 140까지 계속 ↓↓↓
-
 { id: 51, text: "다른 사람들은 시간 낭비라고 생각하는 일이라도, 새로운 일이면 재미 삼아 해본다.", cat: "NS", sub: "NS1", rev: false,
 reflections: ["새로운 경험을 즐기나요?","호기심이 많은 편인가요?","남들이 안 해도 시도하나요?","재미를 위해 행동하나요?"]},
 
@@ -960,7 +949,7 @@ reflections: ["환경에 끌려가는 느낌이 있나요?","선택권이 없다
 { id: 53, text: "어떤 방식으로든 나 자신이 나이나 성별, 인종에 관계없이 모든 인류와 연결되어 있다고 느낀다.", cat: "ST", sub: "ST2", rev: false,
 reflections: ["모든 사람과 연결감을 느끼나요?","차이를 크게 느끼지 않나요?","인류 전체를 하나로 보나요?","보편적인 연결을 믿나요?"]},
 
-{ id: 54, text: "지칠 때까지 내 자신을 몰아붙이거나 내가 실제로 할 수 있는 것 이상으로 노력할 때가 종종 있다.", cat: "P", sub: "PS1", rev: false,
+{ id: 54, text: "지칠 때까지 내 자신을 몰아붙이기나 내가 실제로 할 수 있는 것 이상으로 노력할 때가 종종 있다.", cat: "P", sub: "PS1", rev: false,
 reflections: ["자신을 과하게 몰아붙이나요?","한계를 넘어서 노력하나요?","쉬지 않고 일하나요?","과도한 노력 경험이 있나요?"]},
 
 { id: 55, text: "붙잡혔을 때 그 상황에서 빠져나오기 위해 쉽게 둘러대는 편이다.", cat: "CO", sub: "CO5", rev: true,
@@ -1195,7 +1184,7 @@ reflections: ["직감에 따라 행동하나요?","세부사항을 덜 따지나
     id: 131, 
     text: "때로 시공간의 제약을 잊고 마치 나 자신이 어떤 것의 일부인 것처럼 느낄 때가 있다.", 
     cat: "ST", sub: "ST2", rev: false,
-    reflections: ["시간과 공간을 초월한 몰입을 경험하나요?", "거대한 전체의 일부라는 연결감을 느끼나요?", "나라는 자의식이 사라지는 순간이 있나요?", "설명하기 힘든 신비로운 일체감을 느끼나요?"]
+    reflections: ["시공간을 초월한 몰입을 경험하나요?", "거대한 전체의 일부라는 연결감을 느끼나요?", "나라는 자의식이 사라지는 순간이 있나요?", "설명하기 힘든 신비로운 일체감을 느끼나요?"]
 },
 { 
     id: 132, 
@@ -1251,7 +1240,6 @@ reflections: ["직감에 따라 행동하나요?","세부사항을 덜 따지나
     cat: "HA", sub: "HA4", rev: true,
     reflections: ["어려운 일 후에 컨디션 회복이 빠른가요?", "정신적 고통에서 금방 털고 일어나나요?", "회복 탄력성이 좋다고 느끼는 편인가요?", "스트레스 후에도 활기를 금방 되찾나요?"]
 }
-
 ];
 
 const scaleMeta = {
@@ -1298,7 +1286,6 @@ const scaleMeta = {
         { id: "ST2", label: "일체감", m: 7.4, sd: 4.1, low: "(낮은) 우주만물과의 일체감", high: "(높은) 우주만물과의 일체감" },
         { id: "ST3", label: "영성수용", m: 9.2, sd: 5.4, low: "합리적 유물론", high: "영성수용" }
     ]}
-
 };
 
 let users = JSON.parse(localStorage.getItem('tci_user_list')) || ["기본사용자"];
@@ -1322,12 +1309,10 @@ function deleteUser() {
 }
 function saveUserConfig() { localStorage.setItem('tci_user_list', JSON.stringify(users)); localStorage.setItem('tci_current_user', currentUser); }
 
-// 1. 질문 렌더링 함수 (수정됨)
 function renderQuestions() {
     const qContainer = document.getElementById('questionsContainer');
     qContainer.innerHTML = '';
     
-    // 점수별 한글 라벨 정의
     const labels = ["그렇지 않다", "별로 그렇지 않다", "약간 그렇다", "그렇다", "매우 그렇다"];
 
     tciRawData.forEach(q => {
@@ -1352,22 +1337,6 @@ function renderQuestions() {
         `;
         qContainer.appendChild(div);
     });
-}// 2. 모달 제어 및 질문 생성 함수 (추가됨)
-
-// openModal 함수 내 헤더 부분 수정
-function updateModalHeader(qId) {
-    const q = tciRawData.find(item => item.id === qId);
-    const currentScore = localStorage.getItem(`tci_${currentUser}_q${qId}`) || "0";
-    
-    document.getElementById('modalHeader').innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span>Q${qId} 추가질문</span>
-            <span id="liveScore" style="background:var(--primary); color:white; padding:2px 8px; border-radius:10px; font-size:0.8rem;">
-                현재 반영 점수: ${currentScore}점
-            </span>
-        </div>
-        <div style="font-size:0.9rem; margin-top:5px; color:#666; font-weight:normal;">"${q.text}"</div>
-    `;
 }
 
 function openModal(qId) {
@@ -1375,23 +1344,20 @@ function openModal(qId) {
     const header = document.getElementById('modalHeader');
     const list = document.getElementById('modalList');
     
-    // 헤더 정보 업데이트 (이전 답변 점수 표시 포함)
     const currentScore = localStorage.getItem(`tci_${currentUser}_q${qId}`) || "0";
-// openModal 함수 내 헤더 렌더링 부분
-header.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-        <span style="color:var(--primary); font-size:0.9rem;">Q${qId} 추가질문</span>
-        <span id="liveScore" style="background:var(--primary); color:white; padding:2px 8px; border-radius:10px; font-size:0.8rem; margin-right: 25px;">
-            현재 반영 점수: ${currentScore}점
-        </span>
-    </div>
-    <div style="font-size:1.05rem; margin-top:5px; color:#444;">"${q.text}"</div>
-`;
 
-    // 질문 데이터 중 상위 4개만 사용
+    header.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+            <span style="color:var(--primary); font-size:0.9rem;">Q${qId} 추가질문</span>
+            <span id="liveScore" style="background:var(--primary); color:white; padding:2px 8px; border-radius:10px; font-size:0.8rem; margin-right: 25px;">
+                현재 반영 점수: ${currentScore}점
+            </span>
+        </div>
+        <div style="font-size:1.05rem; margin-top:5px; color:#444;">"${q.text}"</div>
+    `;
+
     const displayQuestions = (q.reflections || []).slice(0, 4);
     
-    // 만약 데이터에 reflections가 아예 없는 경우를 대비한 기본값 4개
     if (displayQuestions.length === 0) {
         displayQuestions.push(
             "이 문항과 관련된 나의 구체적인 행동 관찰하기",
@@ -1401,12 +1367,11 @@ header.innerHTML = `
         );
     }
 
-    // 리스트 생성 (최대 4개)
     list.innerHTML = displayQuestions.map((text, index) => {
         const isChecked = localStorage.getItem(`tci_${currentUser}_q${qId}_ref_${index}`) === 'true';
         return `
             <li class="${isChecked ? 'checked' : ''}" onclick="toggleReflection(${qId}, ${index}, this)">
-                <input type="checkbox" ${isChecked ? 'checked' : ''} onclick="event.stopPropagation()">
+                <input type="checkbox" ${isChecked ? 'checked' : ''} style="pointer-events: none;">
                 <span>${text}</span>
             </li>
         `;
@@ -1414,10 +1379,7 @@ header.innerHTML = `
 
     document.getElementById('modalOverlay').style.display = 'flex';
 }
-// 체크박스 토글 함수
-// 체크박스 토글 및 문항 점수 자동 업데이트
-// 체크박스 토글 및 PM 지정 점수 로직 자동 업데이트
-// 체크박스 토글 및 점수 업데이트 로직
+
 function toggleReflection(qId, index, element) {
     const checkbox = element.querySelector('input[type="checkbox"]');
     checkbox.checked = !checkbox.checked;
@@ -1428,37 +1390,33 @@ function toggleReflection(qId, index, element) {
         element.classList.remove('checked');
     }
 
-    // 1. 성찰 질문 체크 상태 개별 저장
     localStorage.setItem(`tci_${currentUser}_q${qId}_ref_${index}`, checkbox.checked);
 
-    // 2. 현재 문항의 총 체크 개수 확인 (4개로 범위 축소)
     let checkCount = 0;
-    for (let i = 0; i < 4; i++) { // 기존 5에서 4로 변경
+    for (let i = 0; i < 4; i++) {
         if (localStorage.getItem(`tci_${currentUser}_q${qId}_ref_${i}`) === 'true') {
             checkCount++;
         }
     }
 
-    // 3. 점수 변환 로직 (0개:0점, 1개:1점, 2개:2점, 3개:3점, 4개:4점)
-    let finalScore = checkCount; // 체크 개수가 곧 점수
+    let finalScore = checkCount; 
 
-    // 4. 메인 데이터 저장 및 UI 동기화
     localStorage.setItem(`tci_${currentUser}_q${qId}`, finalScore.toString());
 
-    // 메인 화면의 라디오 버튼 시각적 업데이트
     const radioBtn = document.querySelector(`input[name="q${qId}"][value="${finalScore}"]`);
     if (radioBtn) {
         radioBtn.checked = true;
     }
 
-    // 헤더 점수 표시 실시간 업데이트
     const scoreDisplay = document.getElementById('liveScore');
     if (scoreDisplay) {
         scoreDisplay.innerText = `현재 반영 점수: ${finalScore}점`;
     }
 
     updateProgress();
-}function closeModal() {
+}
+
+function closeModal() {
     document.getElementById('modalOverlay').style.display = 'none';
 }
 
@@ -1478,7 +1436,6 @@ function resetCurrentAnswers() {
     }
 }
 
-// 이론 가이드 토글 함수
 function toggleTheoryGuide() {
     const content = document.getElementById('theoryContent');
     if (content.style.display === 'block') {
